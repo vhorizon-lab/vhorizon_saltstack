@@ -13,8 +13,6 @@ Vagrant.configure("2") do |config|
 
   # This is so we can use the same ssh key to make it easier to dev against
   # Yes it is insecure...
-  # config.ssh.username = "root"
-  # config.ssh.password = "@RTemis503@RTemis503"
   config.ssh.insert_key = false
 
   # Which os to install
