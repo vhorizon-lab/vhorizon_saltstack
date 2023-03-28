@@ -6,13 +6,15 @@ Vagrant.configure("2") do |config|
 
   # This is the minions local subnet
   # Note this also needs to be changed in pillar/mine.sls
-  net_ip = "192.168.56"
+  net_ip = "192.168.1"
   
   # Number of minions to create not counting the saltmaster
-  minion_count = 1
+  minion_count = 2
 
   # This is so we can use the same ssh key to make it easier to dev against
   # Yes it is insecure...
+  # config.ssh.username = "root"
+  # config.ssh.password = "@RTemis503@RTemis503"
   config.ssh.insert_key = false
 
   # Which os to install
@@ -29,7 +31,12 @@ Vagrant.configure("2") do |config|
   config.vm.define "saltmaster", primary: true do |sm|
     sm.vm.box = "#{os}"
     sm.vm.host_name = 'saltmaster.vagrant.lan'
-    sm.vm.network "private_network", ip: "#{net_ip}.10"
+    sm.vm.network "public_network", bridge: 'enp0s31f6', ip: "#{net_ip}.10"
+
+   config.vm.provision "shell", inline: <<-SHELL
+     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+     systemctl restart sshd.service
+    SHELL
 
     # Change master hardware specs here
     config.vm.provider "virtualbox" do |v|
@@ -58,6 +65,11 @@ Vagrant.configure("2") do |config|
 
     config.vm.define "minion#{minion_index}" do |node|
 
+    config.vm.provision "shell", inline: <<-SHELL
+     sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
+     systemctl restart sshd.service
+    SHELL
+
       # Change minion hardware specs here
       config.vm.provider "virtualbox" do |v|
         v.memory = 2048
@@ -66,7 +78,7 @@ Vagrant.configure("2") do |config|
 
       node.vm.box = "#{os}"
       node.vm.host_name = "minion#{minion_index}.vagrant.lan"
-      node.vm.network "private_network", ip: "#{net_ip}.1#{minion_index}"
+      node.vm.network "public_network", bridge: 'enp0s31f6', ip: "#{net_ip}.1#{minion_index}"
 
       # We just use the salt provisioner to install and configure salt
       node.vm.provision :salt do |salt|
