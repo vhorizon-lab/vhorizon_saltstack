@@ -1,5 +1,8 @@
 httpd:
   pkg.installed
+  
+firewalld:
+  pkg.installed
 
 httpd Service:
   service.running:
@@ -9,6 +12,13 @@ httpd Service:
       - pkg: httpd
     - watch:
       - file: /etc/httpd/sites-available/{{ pillar['domain'] }}.conf
+
+firewalld Service:
+  service.running:
+    - name: firewalld
+    - enable: True
+    - require:
+      - pkg: firewalld
 
 Turn off KeepAlive:
   file.replace:

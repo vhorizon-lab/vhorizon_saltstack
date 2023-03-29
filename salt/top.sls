@@ -6,3 +6,4 @@ base:
   'minion2':
     - match: compound
     - apache-centos
+    - firewall-cmd
