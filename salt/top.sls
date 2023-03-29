@@ -3,7 +3,6 @@ base:
     - match: compound
     - apache-debian
 
-  'minion2':
+  'webserver':
     - match: compound
     - apache-centos
-    - firewall-cmd

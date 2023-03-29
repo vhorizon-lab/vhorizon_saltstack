@@ -1,9 +1,6 @@
 httpd:
   pkg.installed
   
-firewalld:
-  pkg.installed
-
 httpd Service:
   service.running:
     - name: httpd
@@ -12,6 +9,9 @@ httpd Service:
       - pkg: httpd
     - watch:
       - file: /etc/httpd/sites-available/{{ pillar['domain'] }}.conf
+  
+firewalld:
+  pkg.installed
 
 firewalld Service:
   service.running:
