@@ -28,6 +28,7 @@ Vagrant.configure("2") do |config|
 
   config.vm.define "saltmaster", primary: true do |sm|
     sm.vm.box = "#{os}"
+	sm.vbguest.installer_options = { allow_kernel_upgrade: true }
     sm.vm.host_name = 'saltmaster.vagrant.lan'
     sm.vm.network "public_network", bridge: 'enp0s31f6', ip: "#{net_ip}.10"
 
@@ -60,10 +61,11 @@ Vagrant.configure("2") do |config|
   # Setup webserver
   config.vm.define "webserver", primary: true do |web|
     web.vm.box = "#{os}"
+	web.vbguest.installer_options = { allow_kernel_upgrade: true }
     web.vm.host_name = 'webserver.vagrant.lan'
-    web.vm.network "public_network", bridge: 'enp0s31f6', ip: "#{net_ip}.5"
+    web.vm.network "public_network", bridge: 'enp0s31f6', ip: "#{net_ip}.6"
 
-   config.vm.provision "shell", inline: <<-SHELL
+   web.vm.provision "shell", inline: <<-SHELL
      sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config    
      systemctl restart sshd.service
     SHELL
@@ -107,6 +109,7 @@ Vagrant.configure("2") do |config|
       end
 
       node.vm.box = "#{os}"
+	  node.vbguest.installer_options = { allow_kernel_upgrade: true }
       node.vm.host_name = "minion#{minion_index}.vagrant.lan"
       node.vm.network "public_network", bridge: 'enp0s31f6', ip: "#{net_ip}.1#{minion_index}"
 
