@@ -1,4 +1,8 @@
 base:
+  '*':
+    - match: compound:
+    - chrony
+
   'G@os_family:Ubuntu':
     - match: compound
     - apache
