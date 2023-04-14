@@ -1,37 +1,24 @@
-nginx:
-  pkg:
-    - installed
+install_nginx:
+  pkg.installed:
+    - name: nginx
   service.running:
-    - watch:
-      - pkg: nginx
-      - file: /etc/nginx/nginx.conf
-      - file: /etc/nginx/sites-available/default
-
-/etc/nginx/nginx.conf:
+    - name: nginx           
+    - enable: true
+	
+add_epel:
+  pkg.installed:
+    - name: epel-release
+	
+nginx_configuration:
   file.managed:
-    - source: salt://nginx/files/etc/nginx/nginx.conf
-    - user: root
-    - group: root
-    - mode: 640
-
-/etc/nginx/sites-available/default:
-  file.managed:
-    - source: salt://nginx/files/etc/nginx/sites-available/default.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 640
-
-/etc/nginx/sites-enabled/default:
-  file.symlink:
-    - target: /etc/nginx/sites-available/default
+    - name: /etc/nginx/nginx.conf
+    - source: salt://nginx/config/nginx.conf
     - require:
-      - file: /etc/nginx/sites-available/default
-
-/usr/share/nginx/html/index.html:
-  file.managed:
-    - source: salt://nginx/files/usr/share/nginx/html/index.html.jinja
-    - template: jinja
-    - user: root
-    - group: root
-    - mode: 644
+      - pkg: nginx
+	  
+nginx_restart:
+  module.wait:                  
+  - name: service.restart
+  - m_name: nginx
+  - watch:
+    - nginx_configuration

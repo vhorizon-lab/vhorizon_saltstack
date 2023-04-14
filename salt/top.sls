@@ -1,8 +1,8 @@
 base:
-  'G@os_family:Debian':
+  'G@os_family:Ubuntu':
     - match: compound
-    - apache-debian
+    - apache
 
-  'webserver':
-    - match: compound
-    - apache-centos
+  'G@os_family:CentOS':
+    - match: compound:
+    - nginx
