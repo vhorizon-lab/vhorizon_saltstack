@@ -1,1 +1,1 @@
-domain: dev.vhorizon.local
+domain: prod.vhorizon.local

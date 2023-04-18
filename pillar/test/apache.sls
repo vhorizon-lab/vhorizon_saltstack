@@ -1,1 +1,1 @@
-domain: dev.vhorizon.local
+domain: test.vhorizon.local
