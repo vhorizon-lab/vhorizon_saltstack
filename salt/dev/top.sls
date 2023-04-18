@@ -1,4 +1,4 @@
-base:
+dev:
   '*':
     - match: compound:
     - chrony
