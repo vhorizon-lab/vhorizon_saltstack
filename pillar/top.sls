@@ -1,5 +1,5 @@
-dev:
+base:
   '*':
     - apache
     - mine
-	- chrony
+    - chrony

@@ -1,1 +1,0 @@
-domain: prod.vhorizon.local

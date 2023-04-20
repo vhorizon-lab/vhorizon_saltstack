@@ -1,5 +1,0 @@
-dev:
-  '*':
-    - apache
-    - mine
-	- chrony
