@@ -4,3 +4,4 @@ base:
     - chrony
     - apache
     - nginx
+    - django
